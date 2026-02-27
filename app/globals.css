@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─── */
+:root {
+  --bg-app: #0D0E12;
+  --bg-card: #16181D;
+  --bg-elevated: #1E2027;
+  --border-card: #272A30;
+  --text-primary: #F3F4F6;
+  --text-muted: #828690;
+  --accent-green: #00C278;
+  --accent-red: #F33959;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(130, 134, 144, 0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(130, 134, 144, 0.35); }
+
+/* ─── Card System (Flat Matte Panels) ─── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.card-elevated {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* Legacy glass aliases — map to flat cards */
+.glass { background: var(--bg-card); border: 1px solid var(--border-card); }
+.glass-subtle { background: rgba(22, 24, 29, 0.6); border: 1px solid var(--border-card); }
+.glass-card { background: var(--bg-card); border: 1px solid var(--border-card); }
+.glass-elevated { background: var(--bg-elevated); border: 1px solid var(--border-card); }
+
+/* ─── Shimmer ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+}
+
+/* ─── Thesis Score Colors ─── */
+.score-high { color: var(--accent-green); }
+.score-mid { color: var(--text-muted); }
+.score-low { color: #4B5563; }
+.score-bar-high { background: var(--accent-green); }
+.score-bar-mid { background: var(--text-muted); }
+.score-bar-low { background: #333740; }
+
+/* ─── Stage Badges ─── */
+.stage-pre-seed { background: rgba(130, 134, 144, 0.08); color: #A0A4AC; border: 1px solid rgba(130, 134, 144, 0.15); }
+.stage-seed { background: rgba(0, 194, 120, 0.08); color: #00C278; border: 1px solid rgba(0, 194, 120, 0.15); }
+.stage-series-a { background: rgba(243, 244, 246, 0.06); color: #F3F4F6; border: 1px solid rgba(243, 244, 246, 0.12); }
+.stage-series-b { background: rgba(251, 191, 36, 0.08); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.15); }
+.stage-series-c { background: rgba(243, 57, 89, 0.08); color: #F33959; border: 1px solid rgba(243, 57, 89, 0.15); }
+
+/* ─── Signal Badges ─── */
+.signal-funding { background: rgba(0, 194, 120, 0.08); color: #00C278; }
+.signal-hiring { background: rgba(243, 244, 246, 0.06); color: #F3F4F6; }
+.signal-product { background: rgba(130, 134, 144, 0.08); color: #A0A4AC; }
+.signal-press { background: rgba(251, 191, 36, 0.08); color: #fbbf24; }
+.signal-founder { background: rgba(243, 57, 89, 0.08); color: #F33959; }
+
+/* ─── Chart Tooltip ─── */
+.chart-tooltip {
+  background: rgba(22, 24, 29, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid #272A30 !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+}
