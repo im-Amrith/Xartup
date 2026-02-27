@@ -1,3 +1,73 @@
+// ─── Seeded PRNG (deterministic across renders) ───
+function seededRandom(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+// ─── Hero Price / Volume Chart (180 points, random walk) ───
+function generatePriceData() {
+  const rng = seededRandom(42);
+  const MONTHS = [
+    "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr",
+  ];
+  const START_YEAR = 2024;
+  const POINTS = 180;
+
+  let price = 1850;
+  const drift = 0.15; // slight upward bias
+  const volatility = 18;
+  const data: { date: string; price: number; volume: number }[] = [];
+
+  // Distribute ~180 points across 8 months (≈22–23 per month)
+  let currentMonth = 0;
+  let dayInMonth = 1;
+  const daysPerMonth = [30, 31, 30, 31, 31, 28, 31, 30];
+
+  for (let i = 0; i < POINTS; i++) {
+    // Price: random walk with drift + micro-fluctuation
+    const shock = (rng() - 0.48) * volatility + drift;
+    const micro = (rng() - 0.5) * 8;
+    price = Math.max(1750, Math.min(2850, price + shock + micro));
+
+    // Volume: wild fluctuations, occasional spikes
+    const baseVol = 15 + rng() * 45;
+    const spike = rng() > 0.9 ? rng() * 60 : 0;
+    const volume = Math.round(baseVol + spike);
+
+    // Date label: only show month name on 1st of each month
+    const year = currentMonth >= 4 ? START_YEAR + 1 : START_YEAR;
+    const monthName = MONTHS[currentMonth];
+    let dateLabel = "";
+
+    // Special: "2025" year marker on Jan 1
+    if (currentMonth === 4 && dayInMonth === 1) {
+      dateLabel = "2025";
+    } else if (dayInMonth === 1) {
+      dateLabel = monthName;
+    }
+
+    data.push({
+      date: dateLabel,
+      price: Math.round(price * 100) / 100,
+      volume,
+    });
+
+    // Advance day
+    dayInMonth++;
+    if (dayInMonth > daysPerMonth[currentMonth]) {
+      dayInMonth = 1;
+      currentMonth++;
+      if (currentMonth >= MONTHS.length) break;
+    }
+  }
+  return data;
+}
+
+export const HERO_PRICE_DATA = generatePriceData();
+
 // ─── Deal Flow & Capital Deployed (18 months) ───
 export const DEAL_FLOW_DATA = [
   { month: "Sep '24", deals: 11, capital: 42.5 },
@@ -38,11 +108,11 @@ export const SECTOR_VOLUME_DATA = [
 
 // ─── Pipeline Distribution ───
 export const PIPELINE_DATA = [
-  { stage: "Screening", value: 156, color: "#00E5FF" },
-  { stage: "Analysis", value: 64, color: "#B026FF" },
-  { stage: "Due Diligence", value: 28, color: "#00FF85" },
+  { stage: "Screening", value: 156, color: "#F3F4F6" },
+  { stage: "Analysis", value: 64, color: "#828690" },
+  { stage: "Due Diligence", value: 28, color: "#00C278" },
   { stage: "Term Sheet", value: 12, color: "#fbbf24" },
-  { stage: "Closed", value: 8, color: "#fb7185" },
+  { stage: "Closed", value: 8, color: "#F33959" },
 ];
 
 // ─── Portfolio Company Growth Index ───
